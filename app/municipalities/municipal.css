@@ -1,0 +1,677 @@
+/* ==========================================================================
+   NH Municipal Fleet Catalog — page styles
+   Sheets are a fixed 816 × 1056 px canvas (8.5" × 11" @ 96dpi). The flipbook
+   scales them down with a CSS transform; the /municipalities/print route and
+   the PDF export render them 1:1.
+   ========================================================================== */
+
+:root {
+  --muni-red: #be1e23;
+  --muni-red-dark: #8c0f14;
+  --muni-ink: #1a1a1a;
+  --muni-paper: #fafafa;
+  --muni-gray: #55575c;
+  --muni-line: rgba(26, 26, 26, 0.14);
+}
+
+/* ---------- sheet base ---------- */
+.muni-sheet {
+  width: 816px;
+  height: 1056px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+    Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.muni-light {
+  background: var(--muni-paper);
+  color: var(--muni-ink);
+}
+
+.muni-dark {
+  background: var(--muni-ink);
+  color: var(--muni-paper);
+}
+
+/* ---------- [ADRIANA] placeholders — must stay visible in print ---------- */
+.muni-todo {
+  background: #fff3bf;
+  color: #7a5b00;
+  border: 1px dashed #d9a400;
+  border-radius: 4px;
+  padding: 0 4px;
+  font-weight: 600;
+  font-size: 0.92em;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.muni-todo-block {
+  border: 2px dashed #d9a400;
+  background: #fff8dc;
+  color: #7a5b00;
+  border-radius: 8px;
+  min-height: 120px;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: 18px 28px;
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 1.45;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.muni-todo-block.tall {
+  min-height: 240px;
+}
+
+/* ---------- covers (pages 1 & 9) ---------- */
+.muni-cover {
+  position: relative;
+  z-index: 2;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  padding: 64px 64px 56px;
+  gap: 36px;
+}
+
+.muni-cover-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.muni-cover-mark {
+  width: 54px;
+  height: 54px;
+  display: block;
+}
+
+.muni-cover-mark svg {
+  width: 100%;
+  height: 100%;
+}
+
+.muni-cover-eyebrow {
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: rgba(250, 250, 250, 0.72);
+  border: 1px solid rgba(250, 250, 250, 0.28);
+  border-radius: 999px;
+  padding: 8px 18px;
+}
+
+.muni-cover-title h1 {
+  margin: 0;
+  font-size: 64px;
+  line-height: 1.02;
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+
+.muni-cover-sub {
+  margin: 14px 0 0;
+  font-size: 26px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 5px;
+  color: var(--muni-red);
+}
+
+.muni-cover-tagline {
+  margin: 0;
+  font-size: 20px;
+  line-height: 1.55;
+  color: rgba(250, 250, 250, 0.85);
+  max-width: 560px;
+}
+
+.muni-cover-band {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: auto;
+}
+
+.muni-contract-chip {
+  display: inline-block;
+  border: 1.5px solid var(--muni-red);
+  color: var(--muni-paper);
+  background: rgba(190, 30, 35, 0.16);
+  border-radius: 8px;
+  padding: 10px 22px;
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.muni-cover-foot {
+  display: flex;
+  justify-content: space-between;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(250, 250, 250, 0.6);
+}
+
+/* red slash across the bottom of dark pages */
+.muni-cover-slash {
+  position: absolute;
+  z-index: 1;
+  left: -10%;
+  bottom: -150px;
+  width: 120%;
+  height: 240px;
+  background: linear-gradient(90deg, var(--muni-red-dark), var(--muni-red));
+  transform: rotate(-4deg);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/* back cover specifics */
+.muni-back .muni-cover-title h1 {
+  font-size: 52px;
+}
+
+.muni-back-contact {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.muni-back-contact p {
+  margin: 0;
+}
+
+.muni-back-band {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.muni-back-band > div {
+  display: flex;
+  gap: 14px;
+}
+
+.muni-back-vendor {
+  font-size: 15px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: rgba(250, 250, 250, 0.72);
+}
+
+/* ---------- interior content pages ---------- */
+.muni-content {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+  padding: 56px 64px 24px;
+  min-height: 0;
+}
+
+.muni-head {
+  border-bottom: 4px solid var(--muni-red);
+  padding-bottom: 18px;
+}
+
+.muni-head-cont {
+  border-bottom-width: 2px;
+}
+
+.muni-eyebrow {
+  display: block;
+  font-size: 13px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: var(--muni-red);
+  margin-bottom: 10px;
+}
+
+.muni-headline {
+  margin: 0;
+  font-size: 40px;
+  line-height: 1.08;
+  font-weight: 900;
+  letter-spacing: -0.3px;
+  color: var(--muni-ink);
+}
+
+.muni-body {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.muni-body p {
+  margin: 0;
+  font-size: 16.5px;
+  line-height: 1.62;
+  color: #33353a;
+}
+
+.muni-strong {
+  font-weight: 800;
+  color: var(--muni-ink) !important;
+}
+
+/* stat band (page 2) */
+.muni-stats {
+  margin-top: auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-top: 3px solid var(--muni-ink);
+}
+
+.muni-stat {
+  padding: 18px 14px 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  border-right: 1px solid var(--muni-line);
+}
+
+.muni-stat:last-child {
+  border-right: none;
+}
+
+.muni-stat-value {
+  font-size: 30px;
+  font-weight: 900;
+  color: var(--muni-red);
+  line-height: 1;
+}
+
+.muni-stat-label {
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--muni-ink);
+}
+
+.muni-stat-note {
+  font-size: 11.5px;
+}
+
+/* cooperative programs (page 3) */
+.muni-programs {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.muni-program {
+  border-left: 5px solid var(--muni-red);
+  background: #fff;
+  border-top: 1px solid var(--muni-line);
+  border-right: 1px solid var(--muni-line);
+  border-bottom: 1px solid var(--muni-line);
+  padding: 14px 18px;
+}
+
+.muni-program h3 {
+  margin: 0 0 6px;
+  font-size: 18px;
+  font-weight: 900;
+  color: var(--muni-ink);
+}
+
+.muni-program h3 span {
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--muni-gray);
+}
+
+.muni-program p {
+  margin: 0;
+  font-size: 14.5px;
+  line-height: 1.5;
+}
+
+.muni-timesave h4 {
+  margin: 0 0 10px;
+  font-size: 15px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--muni-ink);
+}
+
+.muni-timesave-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.muni-timesave-cell {
+  border-radius: 8px;
+  padding: 14px 16px;
+  font-size: 14.5px;
+  line-height: 1.5;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.muni-timesave-cell.slow {
+  background: #ececec;
+  color: var(--muni-gray);
+}
+
+.muni-timesave-cell.fast {
+  background: var(--muni-red);
+  color: #fff;
+}
+
+.muni-timesave-label {
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+}
+
+.muni-sidebar {
+  margin-top: auto;
+  border: 2px solid var(--muni-red);
+  border-radius: 10px;
+  padding: 16px 20px;
+  background: #fff;
+}
+
+.muni-sidebar p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.55;
+  font-weight: 600;
+  color: var(--muni-ink);
+}
+
+/* equipment lineup (pages 4–5) */
+.muni-units {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  flex: 1 1 auto;
+}
+
+.muni-unit {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 24px;
+  align-items: stretch;
+}
+
+.muni-unit .muni-todo-block {
+  min-height: 210px;
+}
+
+.muni-unit-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 6px;
+}
+
+.muni-unit-body h3 {
+  margin: 0;
+  font-size: 23px;
+  font-weight: 900;
+  color: var(--muni-ink);
+  line-height: 1.2;
+}
+
+.muni-unit-body p {
+  margin: 0;
+  font-size: 15.5px;
+  line-height: 1.58;
+  color: #33353a;
+}
+
+.muni-unit-tag {
+  align-self: flex-start;
+  margin-top: auto;
+  background: var(--muni-ink);
+  color: #fff;
+  font-size: 12.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  padding: 7px 14px;
+  border-radius: 6px;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/* service list (page 7) */
+.muni-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.muni-list li {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--muni-ink);
+  padding: 16px 18px 16px 46px;
+  background: #fff;
+  border: 1px solid var(--muni-line);
+  border-radius: 8px;
+  position: relative;
+  line-height: 1.4;
+}
+
+.muni-list li::before {
+  content: "";
+  position: absolute;
+  left: 18px;
+  top: 22px;
+  width: 12px;
+  height: 12px;
+  background: var(--muni-red);
+  transform: rotate(45deg);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/* purchase steps (page 8) */
+.muni-steps {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  flex: 1 1 auto;
+}
+
+.muni-step {
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.muni-step-num {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--muni-red);
+  color: #fff;
+  font-size: 28px;
+  font-weight: 900;
+  display: grid;
+  place-items: center;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.muni-step h3 {
+  margin: 2px 0 6px;
+  font-size: 21px;
+  font-weight: 900;
+  color: var(--muni-ink);
+}
+
+.muni-step p {
+  margin: 0;
+  font-size: 15.5px;
+  line-height: 1.55;
+  color: #33353a;
+}
+
+.muni-reassure {
+  background: var(--muni-ink);
+  border-left: 6px solid var(--muni-red);
+  border-radius: 8px;
+  padding: 18px 22px;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.muni-reassure p {
+  margin: 0;
+  color: #fafafa;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+/* ---------- footer on every interior page ---------- */
+.muni-footer {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 64px 26px;
+  border-top: 1px solid var(--muni-line);
+  font-size: 12px;
+  color: var(--muni-gray);
+}
+
+.muni-footer-mark {
+  width: 22px;
+  height: 22px;
+  flex: 0 0 auto;
+}
+
+.muni-footer-mark svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.muni-footer-vendor {
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--muni-ink);
+}
+
+.muni-footer-phone {
+  margin-left: auto;
+  font-weight: 600;
+}
+
+.muni-footer-num {
+  font-weight: 800;
+  color: var(--muni-red);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ==========================================================================
+   Flipbook scaling — a sheet rendered inside a react-pageflip page
+   ========================================================================== */
+.muni-scale {
+  width: 816px;
+  height: 1056px;
+  transform-origin: top left;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.page .muni-scale .muni-sheet {
+  box-shadow: none;
+}
+
+/* mini sheets inside the thumbnail drawer */
+.muni-thumb-scale {
+  width: 816px;
+  height: 1056px;
+  transform-origin: top left;
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
+
+.thumb.muni-thumb {
+  aspect-ratio: 8.5 / 11;
+}
+
+/* ==========================================================================
+   Print route (/municipalities/print) + PDF export
+   ========================================================================== */
+.muni-print {
+  background: #fff;
+}
+
+/* globals.css locks body scroll for the flipbook shell — undo it here */
+body:has(.muni-print) {
+  overflow: auto;
+  background: #fff;
+}
+
+.muni-print .print-sheet {
+  width: 816px;
+  height: 1056px;
+  overflow: hidden;
+  margin: 0 auto;
+  break-after: page;
+  page-break-after: always;
+}
+
+.muni-print .print-sheet:last-child {
+  break-after: auto;
+  page-break-after: auto;
+}
+
+@page {
+  size: letter;
+  margin: 0;
+}
+
+@media print {
+  html,
+  body {
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    background: #fff !important;
+    height: auto !important;
+  }
+}
