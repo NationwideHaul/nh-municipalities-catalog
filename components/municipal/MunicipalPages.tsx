@@ -509,3 +509,17 @@ export const MUNI_PAGE_COMPONENTS: {
   { n: 11, title: "Trusted By", Component: TrustedPage },
   { n: 12, title: "Back Cover", Component: BackCoverPage },
 ];
+
+/** Client-side sheet stack for the print route — server components can render
+ *  this but can no longer .map over MUNI_PAGE_COMPONENTS (this file is "use client"). */
+export function MunicipalPrintSheets() {
+  return (
+    <>
+      {MUNI_PAGE_COMPONENTS.map(({ n, Component }) => (
+        <section className="print-sheet" key={n}>
+          <Component />
+        </section>
+      ))}
+    </>
+  );
+}
