@@ -6,7 +6,7 @@
  * rendered as a visible highlighted placeholder in the flipbook AND the PDF.
  */
 
-export const MUNI_TOTAL_PAGES = 9;
+export const MUNI_TOTAL_PAGES = 11;
 
 export const BRAND = {
   name: "Nationwide Haul",
@@ -87,45 +87,103 @@ export const COOP = {
     "Not sure if your agency can purchase through these contracts? Most Florida and Georgia municipalities, counties, school districts, and special districts are eligible. Call us — we'll check with you.",
 };
 
-/* ---------------- Pages 4–5 — Equipment Lineup (light spread) ---------------- */
+/* ---------------- Pages 4–7 — Equipment Lineup (light spread) ---------------- */
 export interface EquipmentUnit {
   category: string;
   copy: string;
   availableUnder: string;
-  photoSlot: string;
+  /** Real photo in /public/municipal. When absent, photoSlot renders as a placeholder. */
+  photo?: string;
+  photoSlot?: string;
+  /** Short spec highlights rendered as chips. */
+  specs?: string[];
+  /** Manufacturer badge (currently only MAC Trailer). */
+  brand?: "mac";
+  video?: string;
 }
 
 export const EQUIPMENT = {
   eyebrow: "Equipment Lineup",
   headline: "Built for public works.",
-  pageA: [
-    {
-      category: "Dump Trailers — MAC FL Spec",
-      copy: "The MAC FL Spec runs lighter than standard dump trailers, which means more payload per trip on county material runs. Aluminum construction, Florida-spec build. [ADRIANA: specs from Meta Ads campaign copy]",
-      availableUnder: "Available under: FSA",
-      photoSlot: "[ADRIANA: MAC FL Spec dump trailer photo — real NH yard]",
-    },
-    {
-      category: "Pitts Trailers",
-      copy: "[ADRIANA: approved FSA line items — Pitts models + short spec copy]",
-      availableUnder: "Available under: FSA",
-      photoSlot: "[ADRIANA: Pitts unit photo — priority per brief]",
-    },
-  ] as EquipmentUnit[],
-  pageB: [
-    {
-      category: "Lowboys / Equipment Trailers",
-      copy: "For hauling excavators, loaders, and mowers between job sites. Built to take the daily on-off cycle of a public works schedule.",
-      availableUnder: "Available under: FSA",
-      photoSlot: "[ADRIANA: lowboy / equipment trailer photo]",
-    },
-    {
-      category: "[Additional categories]",
-      copy: "[ADRIANA: pull from inventory — flatbeds? tag trailers?]",
-      availableUnder: "Available under: [ADRIANA: confirm contract]",
-      photoSlot: "[ADRIANA: photo]",
-    },
-  ] as EquipmentUnit[],
+  pages: [
+    [
+      {
+        category: "Moving Floor Trailers",
+        copy: "Self-unloading walking-floor trailers for transfer stations, yard waste, and bulky debris — no tipping, no overhead clearance issues. Built by MAC Trailer in lightweight extruded aluminum.",
+        availableUnder: "Available under: FSA",
+        photo: "/municipal/moving-floor.webp",
+        specs: [
+          "6005A extruded aluminum",
+          "Keith Walking Floor standard — Hallco / Cargo Floor optional",
+          ".190 sidewall standard",
+          "Jost H451 galvanized landing gear",
+          "MAC spring ride or Hendrickson air ride",
+        ],
+        brand: "mac",
+        video: "https://www.youtube.com/watch?v=TAm5vIAFrCw",
+      },
+      {
+        category: "Tippers",
+        copy: "Transfer trailers built for tipper operation — back in, lift, and gone. 6061 extruded aluminum construction keeps tare weight down and payload up.",
+        availableUnder: "Available under: FSA",
+        photo: "/municipal/tipper.webp",
+        specs: [
+          "6061 extruded aluminum",
+          "¼” floor standard — ⅜” & ½” optional",
+          "Overslung hollow-core gate with greaseless hinge",
+          "Jost H451 galvanized landing gear",
+          "MAC spring ride or Hendrickson air ride",
+        ],
+        brand: "mac",
+        video: "https://youtu.be/SEsLV4uLlkY",
+      },
+    ],
+    [
+      {
+        category: "Leachate Tanks",
+        copy: "Purpose-built tanks for hauling landfill leachate. [ADRIANA: versions + capacities from screenshot — pending]",
+        availableUnder: "Available under: [ADRIANA: confirm contract]",
+        photo: "/municipal/leachate-tank.webp",
+      },
+      {
+        category: "Sludge Dumps",
+        copy: "[ADRIANA: sludge dump copy + specs]",
+        availableUnder: "Available under: [ADRIANA: confirm contract]",
+        photoSlot: "[ADRIANA: sludge dump photo]",
+      },
+    ],
+    [
+      {
+        category: "Rail Chassis — Waste",
+        copy: "[ADRIANA: rail chassis copy + specs]",
+        availableUnder: "Available under: [ADRIANA: confirm contract]",
+        photoSlot: "[ADRIANA: rail chassis photo]",
+      },
+      {
+        category: "Gooseneck Low Boys",
+        copy: "For hauling excavators, loaders, and mowers between job sites. Built to take the daily on-off cycle of a public works schedule.",
+        availableUnder: "Available under: [ADRIANA: confirm contract]",
+        photoSlot: "[ADRIANA: gooseneck lowboy photo]",
+      },
+    ],
+    [
+      {
+        category: "Tag Along Trailers",
+        copy: "Tag-along equipment trailers with a 21' deck and 60” lay-flat dovetail — spring-assisted ramps and 40,000 lb of equally distributed capacity. FOB Pittsview, AL; transport to other locations subject to additional charge.",
+        availableUnder: "Available under: [ADRIANA: confirm contract]",
+        photo: "/municipal/tag-along.webp",
+        specs: [
+          "47,350 lb GVWR",
+          "32' × 102” — Apitong deck flooring",
+          "21' deck + 60” lay-flat dovetail",
+          "(2) 22,500 lb axles · 49” spacing · ABS",
+          "Hutchens 3-point, 4-spring suspension",
+          "Spring-assisted ramps · gooseneck toolbox",
+          "215/75R17.5 tires · drop-leg two-speed landing gear",
+        ],
+      },
+    ],
+  ] as EquipmentUnit[][],
 };
 
 /* ---------------- Page 6 — Financing & Municipal Leasing (light) ---------------- */
@@ -198,10 +256,12 @@ export const MUNI_PAGES: { n: number; title: string; dark: boolean }[] = [
   { n: 3, title: "Cooperative Purchasing", dark: false },
   { n: 4, title: "Equipment Lineup", dark: false },
   { n: 5, title: "Equipment Lineup", dark: false },
-  { n: 6, title: "Financing & Leasing", dark: false },
-  { n: 7, title: "Service & Parts", dark: false },
-  { n: 8, title: "How to Purchase", dark: false },
-  { n: 9, title: "Back Cover", dark: true },
+  { n: 6, title: "Equipment Lineup", dark: false },
+  { n: 7, title: "Equipment Lineup", dark: false },
+  { n: 8, title: "Financing & Leasing", dark: false },
+  { n: 9, title: "Service & Parts", dark: false },
+  { n: 10, title: "How to Purchase", dark: false },
+  { n: 11, title: "Back Cover", dark: true },
 ];
 
 export const MUNI_CHAPTERS: { label: string; page: number }[] = [
@@ -209,8 +269,8 @@ export const MUNI_CHAPTERS: { label: string; page: number }[] = [
   { label: "Why NH", page: 2 },
   { label: "Cooperative", page: 3 },
   { label: "Equipment", page: 4 },
-  { label: "Financing", page: 6 },
-  { label: "Service", page: 7 },
-  { label: "How to Buy", page: 8 },
-  { label: "Contact", page: 9 },
+  { label: "Financing", page: 8 },
+  { label: "Service", page: 9 },
+  { label: "How to Buy", page: 10 },
+  { label: "Contact", page: 11 },
 ];

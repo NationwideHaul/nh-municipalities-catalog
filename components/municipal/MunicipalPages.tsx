@@ -222,26 +222,50 @@ export function CoopPage() {
 
 /* ---------- Pages 4–5 — Equipment Lineup spread ---------- */
 
-function UnitCard({ unit }: { unit: EquipmentUnit }) {
+function UnitCard({ unit, single = false }: { unit: EquipmentUnit; single?: boolean }) {
   return (
-    <div className="muni-unit">
-      <TodoBlock text={unit.photoSlot} />
+    <div className={`muni-unit ${single ? "muni-unit-single" : ""}`}>
+      {unit.photo ? (
+        <div className="muni-unit-photo">
+          <img src={unit.photo} alt={unit.category} />
+        </div>
+      ) : (
+        <TodoBlock text={unit.photoSlot ?? "[photo]"} />
+      )}
       <div className="muni-unit-body">
         <h3>
           <Copy text={unit.category} />
+          {unit.brand === "mac" && (
+            <img className="muni-unit-brand" src="/municipal/mac-trailer-logo.svg" alt="MAC Trailer" />
+          )}
         </h3>
         <p>
           <Copy text={unit.copy} />
         </p>
-        <span className="muni-unit-tag">
-          <Copy text={unit.availableUnder} />
-        </span>
+        {unit.specs && (
+          <ul className="muni-specs">
+            {unit.specs.map((s, i) => (
+              <li key={i}>{s}</li>
+            ))}
+          </ul>
+        )}
+        <div className="muni-unit-foot">
+          <span className="muni-unit-tag">
+            <Copy text={unit.availableUnder} />
+          </span>
+          {unit.video && (
+            <a className="muni-unit-video" href={unit.video} target="_blank" rel="noreferrer">
+              ▶ See it work
+            </a>
+          )}
+        </div>
       </div>
     </div>
   );
 }
 
 function EquipmentSheet({ units, n, showHead }: { units: EquipmentUnit[]; n: number; showHead: boolean }) {
+  const single = units.length === 1;
   return (
     <Sheet>
       <div className="muni-content">
@@ -254,7 +278,7 @@ function EquipmentSheet({ units, n, showHead }: { units: EquipmentUnit[]; n: num
         )}
         <div className="muni-units">
           {units.map((u) => (
-            <UnitCard unit={u} key={u.category} />
+            <UnitCard unit={u} single={single} key={u.category} />
           ))}
         </div>
       </div>
@@ -263,13 +287,14 @@ function EquipmentSheet({ units, n, showHead }: { units: EquipmentUnit[]; n: num
   );
 }
 
-export function EquipmentPageA() {
-  return <EquipmentSheet units={EQUIPMENT.pageA} n={4} showHead />;
-}
+const EQUIPMENT_FIRST_PAGE = 4;
 
-export function EquipmentPageB() {
-  return <EquipmentSheet units={EQUIPMENT.pageB} n={5} showHead={false} />;
-}
+export const EQUIPMENT_PAGE_COMPONENTS = EQUIPMENT.pages.map((units, i) => {
+  const n = EQUIPMENT_FIRST_PAGE + i;
+  return function EquipmentPage() {
+    return <EquipmentSheet units={units} n={n} showHead={i === 0} />;
+  };
+});
 
 /* ---------- Page 6 — Financing & Municipal Leasing ---------- */
 
@@ -283,7 +308,7 @@ export function FinancingPage() {
         </div>
         <TodoBlock text={FINANCING.pending} tall />
       </div>
-      <PageFooter n={6} />
+      <PageFooter n={8} />
     </Sheet>
   );
 }
@@ -309,7 +334,7 @@ export function ServicePage() {
         </ul>
         <TodoBlock text={SERVICE.photoSlot} tall />
       </div>
-      <PageFooter n={7} />
+      <PageFooter n={9} />
     </Sheet>
   );
 }
@@ -338,7 +363,7 @@ export function PurchasePage() {
           <p>{PURCHASE.reassurance}</p>
         </div>
       </div>
-      <PageFooter n={8} />
+      <PageFooter n={10} />
     </Sheet>
   );
 }
@@ -394,10 +419,13 @@ export const MUNI_PAGE_COMPONENTS: {
   { n: 1, title: "Cover", Component: CoverPage },
   { n: 2, title: "Why Nationwide Haul", Component: WhyPage },
   { n: 3, title: "Cooperative Purchasing", Component: CoopPage },
-  { n: 4, title: "Equipment Lineup", Component: EquipmentPageA },
-  { n: 5, title: "Equipment Lineup (cont.)", Component: EquipmentPageB },
-  { n: 6, title: "Financing & Leasing", Component: FinancingPage },
-  { n: 7, title: "Service & Parts", Component: ServicePage },
-  { n: 8, title: "How to Purchase", Component: PurchasePage },
-  { n: 9, title: "Back Cover", Component: BackCoverPage },
+  ...EQUIPMENT_PAGE_COMPONENTS.map((Component, i) => ({
+    n: 4 + i,
+    title: i === 0 ? "Equipment Lineup" : "Equipment Lineup (cont.)",
+    Component,
+  })),
+  { n: 8, title: "Financing & Leasing", Component: FinancingPage },
+  { n: 9, title: "Service & Parts", Component: ServicePage },
+  { n: 10, title: "How to Purchase", Component: PurchasePage },
+  { n: 11, title: "Back Cover", Component: BackCoverPage },
 ];
