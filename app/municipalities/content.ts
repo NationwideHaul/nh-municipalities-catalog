@@ -161,9 +161,18 @@ export const EQUIPMENT = {
       },
       {
         category: "Gooseneck Low Boys",
-        copy: "For hauling excavators, loaders, and mowers between job sites. Built to take the daily on-off cycle of a public works schedule.",
+        copy: "Hydraulic detachable gooseneck lowboys rated at 55 tons in 12' — for moving excavators, dozers, and loaders between job sites. Level Apitong deck with a front approach ramp and traction cleats, and 4-position ride-height control for separate deck and fifth-wheel height.",
         availableUnder: "Available under: [ADRIANA: confirm contract]",
         photoSlot: "[ADRIANA: gooseneck lowboy photo]",
+        specs: [
+          "55-ton capacity in 12' (GAWR/tires set legal payload)",
+          "8'6” × 52'8” overall · 25' clear level deck",
+          "22” loaded deck height · 6” ground clearance",
+          "Non-ground-bearing hydraulic gooseneck · wet-line ready",
+          "(3) 25,000 lb axles · 54½” spread · 3rd-axle air lift",
+          "25K unitized air-ride · flip-axle option",
+          "~20,100 lb tare (±3%) · 16 D-rings · sealed LED harness",
+        ],
       },
     ],
     [
