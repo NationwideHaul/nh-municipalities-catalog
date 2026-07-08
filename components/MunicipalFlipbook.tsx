@@ -241,7 +241,9 @@ export default function MunicipalFlipbook() {
                 maxShadowOpacity={0.35}
                 flippingTime={900}
                 drawShadow
-                showPageCorners
+                /* corner-peel hijacked clicks on in-page controls (specs, links)
+                   and left the sheet half-folded — keep it off */
+                showPageCorners={false}
                 disableFlipByClick
                 startPage={0}
                 onFlip={onFlip}

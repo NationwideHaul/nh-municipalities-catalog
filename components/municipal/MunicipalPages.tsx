@@ -9,18 +9,15 @@
 
 import type { ReactNode, SyntheticEvent } from "react";
 import {
-  BRAND,
-  FOOTER,
   COVER,
   WHY,
-  COOP,
   EQUIPMENT,
+  OEM_LOGOS,
   PROGRAMS,
-  SERVICE,
+  BENEFITS,
   PURCHASE,
   TRUSTED,
   BACK,
-  MUNI_TOTAL_PAGES,
   type EquipmentUnit,
 } from "@/app/municipalities/content";
 
@@ -35,20 +32,29 @@ const stopFlip = {
   onClick: (e: SyntheticEvent) => e.stopPropagation(),
 };
 
-/** Renders copy, wrapping any [bracketed placeholder] in a visible highlight. */
+/** Renders copy: [bracketed placeholders] get a visible highlight,
+ *  **double-starred phrases** render bold. */
 function Copy({ text }: { text: string }) {
-  const parts = text.split(/(\[[^\]]*\])/g);
+  const parts = text.split(/(\[[^\]]*\]|\*\*[^*]+\*\*)/g);
   return (
     <>
-      {parts.map((p, i) =>
-        p.startsWith("[") && p.endsWith("]") ? (
-          <mark className="muni-todo" key={i}>
-            {p}
-          </mark>
-        ) : (
-          <span key={i}>{p}</span>
-        )
-      )}
+      {parts.map((p, i) => {
+        if (p.startsWith("[") && p.endsWith("]")) {
+          return (
+            <mark className="muni-todo" key={i}>
+              {p}
+            </mark>
+          );
+        }
+        if (p.startsWith("**") && p.endsWith("**")) {
+          return (
+            <strong className="muni-bold" key={i}>
+              {p.slice(2, -2)}
+            </strong>
+          );
+        }
+        return <span key={i}>{p}</span>;
+      })}
     </>
   );
 }
@@ -78,18 +84,14 @@ function Sheet({ dark = false, children }: { dark?: boolean; children: ReactNode
   return <div className={`muni-sheet ${dark ? "muni-dark" : "muni-light"}`}>{children}</div>;
 }
 
-/** Footer on every interior content page. */
+/** Wine-red footer band on every interior page: NH logo + page number only. */
 function PageFooter({ n }: { n: number }) {
   return (
     <footer className="muni-footer">
       <span className="muni-footer-mark">
-        <NHLogo />
+        <NHLogo light />
       </span>
-      <span className="muni-footer-vendor">{FOOTER.vendorLine}</span>
-      <span className="muni-footer-phone">{FOOTER.contact}</span>
-      <span className="muni-footer-num">
-        {n} / {MUNI_TOTAL_PAGES}
-      </span>
+      <span className="muni-footer-num">{n}</span>
     </footer>
   );
 }
@@ -116,30 +118,20 @@ export function CoverPage() {
           <span className="muni-cover-eyebrow">{COVER.eyebrow}</span>
         </div>
 
-        <div className="muni-cover-title">
-          <h1>{COVER.title}</h1>
-          <p className="muni-cover-sub">{COVER.subtitle}</p>
-        </div>
+        <h1 className="muni-cover-display" aria-label={COVER.titleLines.join(" ")}>
+          <span className="muni-display-outline">{COVER.titleLines[0]}</span>
+          <span className="muni-display-solid">{COVER.titleLines[1]}</span>
+          <span className="muni-display-red">{COVER.titleLines[2]}</span>
+        </h1>
 
         <div className="muni-cover-photo">
           <img src={COVER.photo} alt="Tipper trailer" />
         </div>
 
         <p className="muni-cover-tagline">{COVER.tagline}</p>
-
-        <div className="muni-cover-band">
-          {BRAND.contracts.map((c) => (
-            <span key={c} className="muni-contract-chip">
-              {c}
-            </span>
-          ))}
-        </div>
-
-        <div className="muni-cover-foot">
-          <span>{BRAND.site}</span>
-        </div>
       </div>
       <div className="muni-cover-slash" aria-hidden />
+      <div className="muni-cover-foot">{COVER.foot}</div>
     </Sheet>
   );
 }
@@ -196,227 +188,7 @@ export function WhyPage() {
   );
 }
 
-/* ---------- Page 3 — Cooperative Purchasing ---------- */
-
-export function CoopPage() {
-  return (
-    <Sheet>
-      <div className="muni-content">
-        <PageHead eyebrow={COOP.eyebrow} headline={COOP.headline} />
-        <div className="muni-body">
-          <p>{COOP.body}</p>
-          <p className="muni-strong">{COOP.vendorIntro}</p>
-        </div>
-
-        <div className="muni-programs">
-          {COOP.programs.map((p) => (
-            <div className="muni-program" key={p.name}>
-              <h3>
-                {p.name}
-                {p.full && <span> — {p.full}</span>}
-              </h3>
-              <p>
-                <Copy text={p.detail} />
-              </p>
-            </div>
-          ))}
-        </div>
-
-        <div className="muni-timesave">
-          <h4>{COOP.timeSave.heading}</h4>
-          <div className="muni-timesave-row">
-            <div className="muni-timesave-cell slow">
-              <span className="muni-timesave-label">{COOP.timeSave.bid.label}</span>
-              <span>{COOP.timeSave.bid.value}</span>
-            </div>
-            <div className="muni-timesave-cell fast">
-              <span className="muni-timesave-label">{COOP.timeSave.coop.label}</span>
-              <span>{COOP.timeSave.coop.value}</span>
-            </div>
-          </div>
-        </div>
-
-        <aside className="muni-sidebar">
-          <p>{COOP.sidebar}</p>
-        </aside>
-      </div>
-      <PageFooter n={3} />
-    </Sheet>
-  );
-}
-
-/* ---------- Pages 4–7 — Equipment Lineup spread ---------- */
-
-function UnitCard({ unit, single = false }: { unit: EquipmentUnit; single?: boolean }) {
-  return (
-    <div className={`muni-unit ${single ? "muni-unit-single" : ""}`}>
-      {unit.photo ? (
-        <div className="muni-unit-photo">
-          <img src={unit.photo} alt={unit.category} />
-        </div>
-      ) : (
-        <TodoBlock text={unit.photoSlot ?? "[photo]"} />
-      )}
-      <div className="muni-unit-body">
-        <h3>
-          <Copy text={unit.category} />
-          {unit.brand === "mac" && (
-            <img className="muni-unit-brand" src="/municipal/mac-trailer-logo.svg" alt="MAC Trailer" />
-          )}
-        </h3>
-        <p>
-          <Copy text={unit.copy} />
-        </p>
-        {unit.specs && (
-          <div className="muni-specs-wrap" {...stopFlip}>
-            {/* checkbox nested in the label — pages render twice (book + thumbs), so no ids */}
-            <label className="muni-specs-toggle">
-              <input type="checkbox" className="muni-specs-check" />
-              Specs
-            </label>
-            <ul className="muni-specs">
-              {unit.specs.map((s, i) => (
-                <li key={i}>{s}</li>
-              ))}
-            </ul>
-          </div>
-        )}
-        {unit.video && (
-          <a className="muni-unit-video" href={unit.video} target="_blank" rel="noreferrer" {...stopFlip}>
-            ▶ See it work
-          </a>
-        )}
-      </div>
-    </div>
-  );
-}
-
-function EquipmentSheet({ units, n, showHead }: { units: EquipmentUnit[]; n: number; showHead: boolean }) {
-  const single = units.length === 1;
-  return (
-    <Sheet>
-      <div className="muni-content">
-        {showHead ? (
-          <PageHead eyebrow={EQUIPMENT.eyebrow} headline={EQUIPMENT.headline} />
-        ) : (
-          <header className="muni-head muni-head-cont">
-            <span className="muni-eyebrow">{EQUIPMENT.eyebrow} — continued</span>
-          </header>
-        )}
-        <div className="muni-units">
-          {units.map((u) => (
-            <UnitCard unit={u} single={single} key={u.category} />
-          ))}
-        </div>
-      </div>
-      <PageFooter n={n} />
-    </Sheet>
-  );
-}
-
-const EQUIPMENT_FIRST_PAGE = 4;
-
-export const EQUIPMENT_PAGE_COMPONENTS = EQUIPMENT.pages.map((units, i) => {
-  const n = EQUIPMENT_FIRST_PAGE + i;
-  return function EquipmentPage() {
-    return <EquipmentSheet units={units} n={n} showHead={i === 0} />;
-  };
-});
-
-/* ---------- Page 8 — Our Government Purchasing Programs ---------- */
-
-export function ProgramsPage() {
-  return (
-    <Sheet>
-      <div className="muni-content">
-        <PageHead eyebrow={PROGRAMS.eyebrow} headline={PROGRAMS.headline} />
-        <div className="muni-body">
-          <p>{PROGRAMS.intro}</p>
-        </div>
-
-        <div className="muni-prog-cards">
-          {PROGRAMS.cards.map((c) => (
-            <div className="muni-prog-card" key={c.name}>
-              <div className="muni-prog-head">
-                <img className="muni-prog-logo" src={c.logo} alt={c.name} />
-                <span className="muni-prog-badge">{c.badge}</span>
-              </div>
-              <h3>{c.name}</h3>
-              <span className="muni-prog-sub">{c.sub}</span>
-              <p>{c.copy}</p>
-              <ul className="muni-prog-bullets">
-                {c.bullets.map((b, i) => (
-                  <li key={i}>{b}</li>
-                ))}
-              </ul>
-              <a className="muni-prog-link" href={c.link} target="_blank" rel="noreferrer" {...stopFlip}>
-                Learn More →
-              </a>
-            </div>
-          ))}
-        </div>
-      </div>
-      <PageFooter n={8} />
-    </Sheet>
-  );
-}
-
-/* ---------- Page 9 — Service & Parts ---------- */
-
-export function ServicePage() {
-  return (
-    <Sheet>
-      <div className="muni-content">
-        <PageHead eyebrow={SERVICE.eyebrow} headline={SERVICE.headline} />
-        <div className="muni-body">
-          <p>
-            <Copy text={SERVICE.body} />
-          </p>
-        </div>
-        <ul className="muni-list">
-          {SERVICE.bullets.map((b, i) => (
-            <li key={i}>
-              <Copy text={b} />
-            </li>
-          ))}
-        </ul>
-        <TodoBlock text={SERVICE.photoSlot} tall />
-      </div>
-      <PageFooter n={9} />
-    </Sheet>
-  );
-}
-
-/* ---------- Page 10 — How to Purchase ---------- */
-
-export function PurchasePage() {
-  return (
-    <Sheet>
-      <div className="muni-content">
-        <PageHead eyebrow={PURCHASE.eyebrow} headline={PURCHASE.headline} />
-        <ol className="muni-steps">
-          {PURCHASE.steps.map((s, i) => (
-            <li className="muni-step" key={i}>
-              <span className="muni-step-num">{i + 1}</span>
-              <div>
-                <h3>{s.title}</h3>
-                <p>
-                  <Copy text={s.copy} />
-                </p>
-              </div>
-            </li>
-          ))}
-        </ol>
-        <div className="muni-reassure">
-          <p>{PURCHASE.reassurance}</p>
-        </div>
-      </div>
-      <PageFooter n={10} />
-    </Sheet>
-  );
-}
-
-/* ---------- Page 11 — Trusted By ---------- */
+/* ---------- Page 3 — Trusted By ---------- */
 
 export function TrustedPage() {
   return (
@@ -442,46 +214,223 @@ export function TrustedPage() {
           ))}
         </div>
       </div>
+      <PageFooter n={3} />
+    </Sheet>
+  );
+}
+
+/* ---------- Pages 4–10 — Equipment Lineup (one unit per page) ---------- */
+
+function EquipmentSheet({ unit, n }: { unit: EquipmentUnit; n: number }) {
+  const oem = unit.brand ? OEM_LOGOS[unit.brand] : null;
+  return (
+    <Sheet>
+      <div className="muni-content muni-eq">
+        <header className="muni-head muni-eq-head">
+          <div className="muni-eq-title">
+            <span className="muni-eyebrow">{EQUIPMENT.eyebrow}</span>
+            <h2 className="muni-headline">
+              <Copy text={unit.category} />
+            </h2>
+          </div>
+          {oem && <img className="muni-eq-oem" src={oem.src} alt={oem.alt} />}
+        </header>
+
+        {unit.photo ? (
+          /* no specs list → let the photo take the extra room */
+          <div className={`muni-eq-photo ${unit.specs ? "" : "muni-eq-photo-tall"}`}>
+            <img
+              src={unit.photo}
+              alt={unit.category}
+              style={unit.photoPos ? { objectPosition: unit.photoPos } : undefined}
+            />
+          </div>
+        ) : (
+          <TodoBlock text={unit.photoSlot ?? "[photo]"} tall />
+        )}
+
+        <div className="muni-eq-info">
+          <p className="muni-eq-copy">
+            <Copy text={unit.copy} />
+          </p>
+          <div className="muni-eq-row">
+            {unit.specs && (
+              <div className="muni-eq-specs">
+                <h4>Spec Highlights</h4>
+                <ul className="muni-specs">
+                  {unit.specs.map((s, i) => (
+                    <li key={i}>{s}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {unit.video && (
+              <div className="muni-eq-video" {...stopFlip}>
+                <div className="muni-video-embed">
+                  <iframe
+                    src={unit.video.embed}
+                    title={`${unit.category} video`}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  />
+                </div>
+                <a className="muni-video-print" href={unit.video.url}>
+                  <img src={unit.video.thumb} alt={`${unit.category} video`} />
+                  <span className="muni-video-play" aria-hidden>
+                    ▶
+                  </span>
+                </a>
+                <span className="muni-eq-video-caption">See it work</span>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+      <PageFooter n={n} />
+    </Sheet>
+  );
+}
+
+const EQUIPMENT_FIRST_PAGE = 4;
+
+export const EQUIPMENT_PAGE_COMPONENTS = EQUIPMENT.units.map((unit, i) => {
+  const n = EQUIPMENT_FIRST_PAGE + i;
+  return function EquipmentPage() {
+    return <EquipmentSheet unit={unit} n={n} />;
+  };
+});
+
+/* ---------- Page 11 — Our Government Purchasing Programs ---------- */
+
+export function ProgramsPage() {
+  return (
+    <Sheet>
+      <div className="muni-content">
+        <PageHead eyebrow={PROGRAMS.eyebrow} headline={PROGRAMS.headline} />
+        <div className="muni-body">
+          <p>{PROGRAMS.intro}</p>
+        </div>
+
+        <div className="muni-prog-cards">
+          {PROGRAMS.cards.map((c) => (
+            <div className="muni-prog-card" key={c.name}>
+              <div className="muni-prog-logo-box">
+                <img className="muni-prog-logo" src={c.logo} alt={c.name} />
+              </div>
+              <div className="muni-prog-body">
+                <div className="muni-prog-name">
+                  <h3>{c.name}</h3>
+                  <span className="muni-prog-badge">{c.badge}</span>
+                </div>
+                <span className="muni-prog-sub">{c.sub}</span>
+                <p>{c.copy}</p>
+                <ul className="muni-prog-bullets">
+                  {c.bullets.map((b, i) => (
+                    <li key={i}>{b}</li>
+                  ))}
+                </ul>
+                <a className="muni-prog-link" href={c.link} target="_blank" rel="noreferrer" {...stopFlip}>
+                  Learn More →
+                </a>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="muni-timesave">
+          <h4>{PROGRAMS.timeSave.heading}</h4>
+          <div className="muni-timesave-row">
+            <div className="muni-timesave-cell slow">
+              <span className="muni-timesave-label">{PROGRAMS.timeSave.bid.label}</span>
+              <span>{PROGRAMS.timeSave.bid.value}</span>
+            </div>
+            <div className="muni-timesave-cell fast">
+              <span className="muni-timesave-label">{PROGRAMS.timeSave.coop.label}</span>
+              <span>{PROGRAMS.timeSave.coop.value}</span>
+            </div>
+          </div>
+        </div>
+      </div>
       <PageFooter n={11} />
     </Sheet>
   );
 }
 
-/* ---------- Page 12 — Back Cover (dark) ---------- */
+/* ---------- Page 12 — Exclusive Benefits ---------- */
+
+export function BenefitsPage() {
+  return (
+    <Sheet>
+      <div className="muni-content">
+        <PageHead eyebrow={BENEFITS.eyebrow} headline={BENEFITS.headline} />
+        <div className="muni-body">
+          <p>{BENEFITS.intro}</p>
+        </div>
+        <div className="muni-benefits">
+          {BENEFITS.items.map((b) => (
+            <div className="muni-benefit" key={b.title}>
+              <h3>{b.title}</h3>
+              <p>{b.copy}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+      <PageFooter n={12} />
+    </Sheet>
+  );
+}
+
+/* ---------- Page 13 — How to Purchase ---------- */
+
+export function PurchasePage() {
+  return (
+    <Sheet>
+      <div className="muni-content">
+        <PageHead eyebrow={PURCHASE.eyebrow} headline={PURCHASE.headline} />
+        <ol className="muni-steps">
+          {PURCHASE.steps.map((s, i) => (
+            <li className="muni-step" key={i}>
+              <span className="muni-step-num">{i + 1}</span>
+              <div>
+                <h3>{s.title}</h3>
+                <p>
+                  <Copy text={s.copy} />
+                </p>
+              </div>
+            </li>
+          ))}
+        </ol>
+        <div className="muni-reassure">
+          <p>{PURCHASE.reassurance}</p>
+        </div>
+      </div>
+      <PageFooter n={13} />
+    </Sheet>
+  );
+}
+
+/* ---------- Page 14 — Back Cover (dark) ---------- */
 
 export function BackCoverPage() {
   return (
     <Sheet dark>
-      <div className="muni-cover muni-back">
-        <div className="muni-cover-top">
-          <span className="muni-cover-logo">
-            <NHLogo light />
-          </span>
-        </div>
+      <div className="muni-backcover">
+        <span className="muni-backcover-logo">
+          <NHLogo light />
+        </span>
+        <h1>{BACK.headline}</h1>
+        <p className="muni-backcover-sub">{BACK.sub}</p>
 
-        <div className="muni-cover-title">
-          <h1>{BACK.title}</h1>
-          <p className="muni-cover-sub">{BACK.subtitle}</p>
-        </div>
-
-        <div className="muni-back-contact">
-          {BACK.contact.map((line, i) => (
-            <p key={i}>
-              <Copy text={line} />
-            </p>
+        <div className="muni-backcover-contacts">
+          {BACK.contacts.map((c) => (
+            <div className="muni-backcover-contact" key={c.label}>
+              <span className="muni-backcover-label">{c.label}</span>
+              <span className="muni-backcover-value">{c.value}</span>
+            </div>
           ))}
         </div>
 
-        <div className="muni-cover-band muni-back-band">
-          <span className="muni-back-vendor">{BACK.vendorLabel}</span>
-          <div>
-            {BRAND.contracts.map((c) => (
-              <span key={c} className="muni-contract-chip">
-                {c}
-              </span>
-            ))}
-          </div>
-        </div>
+        <p className="muni-backcover-note">{BACK.note}</p>
       </div>
       <div className="muni-cover-slash" aria-hidden />
     </Sheet>
@@ -497,17 +446,16 @@ export const MUNI_PAGE_COMPONENTS: {
 }[] = [
   { n: 1, title: "Cover", Component: CoverPage },
   { n: 2, title: "Why Nationwide Haul", Component: WhyPage },
-  { n: 3, title: "Cooperative Purchasing", Component: CoopPage },
+  { n: 3, title: "Trusted By", Component: TrustedPage },
   ...EQUIPMENT_PAGE_COMPONENTS.map((Component, i) => ({
     n: 4 + i,
-    title: i === 0 ? "Equipment Lineup" : "Equipment Lineup (cont.)",
+    title: EQUIPMENT.units[i].category,
     Component,
   })),
-  { n: 8, title: "Purchasing Programs", Component: ProgramsPage },
-  { n: 9, title: "Service & Parts", Component: ServicePage },
-  { n: 10, title: "How to Purchase", Component: PurchasePage },
-  { n: 11, title: "Trusted By", Component: TrustedPage },
-  { n: 12, title: "Back Cover", Component: BackCoverPage },
+  { n: 11, title: "Purchasing Programs", Component: ProgramsPage },
+  { n: 12, title: "Government Benefits", Component: BenefitsPage },
+  { n: 13, title: "How to Purchase", Component: PurchasePage },
+  { n: 14, title: "Back Cover", Component: BackCoverPage },
 ];
 
 /** Client-side sheet stack for the print route — server components can render
