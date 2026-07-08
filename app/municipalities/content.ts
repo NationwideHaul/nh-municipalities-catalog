@@ -6,13 +6,14 @@
  * rendered as a visible highlighted placeholder in the flipbook AND the PDF.
  */
 
-export const MUNI_TOTAL_PAGES = 11;
+export const MUNI_TOTAL_PAGES = 12;
 
 export const BRAND = {
   name: "Nationwide Haul",
   wordmark: "NATIONWIDE HAUL",
   program: "Government Fleet Solutions",
   site: "nationwidehaul.com",
+  email: "govbid@nationwidehaul.com",
   contracts: ["FSA", "Sourcewell", "FLAGFA"],
   contractsDot: "FSA · Sourcewell · FLAGFA",
 };
@@ -20,7 +21,7 @@ export const BRAND = {
 /** Footer strip repeated on every interior (light) page. */
 export const FOOTER = {
   vendorLine: "Cooperative Contract Vendor — FSA | Sourcewell | FLAGFA",
-  phone: "[ADRIANA: phone — dedicated line or main?]",
+  contact: BRAND.email,
 };
 
 /* ---------------- Page 1 — Cover (dark) ---------------- */
@@ -31,32 +32,35 @@ export const COVER = {
   tagline:
     "Trailers and equipment for municipalities, counties, and public agencies — available through cooperative purchasing contracts.",
   contracts: BRAND.contractsDot,
-  photoSlot: "[ADRIANA: cover photo — dump trailer or Pitts unit, real NH yard photo only]",
+  photo: "/municipal/tipper-2.webp",
 };
 
 /* ---------------- Page 2 — Why Nationwide Haul (light) ---------------- */
 export const WHY = {
   eyebrow: "Why Nationwide Haul",
-  headline: "Equipment in the yard. Paperwork we actually understand.",
+  headline: "Government fleets are our lane.",
   body: [
-    "Buying equipment for a public agency shouldn't mean chasing dealers who've never seen a purchase order requisition, or waiting months for units that were “on order” when you signed.",
-    "Nationwide Haul keeps real inventory on the ground at our Florida and Georgia locations. When your department needs a dump trailer or a lowboy, it's sitting in our yard — not on a production schedule.",
-    "And because we're an approved cooperative contract vendor, your purchase runs through contracts that have already been competitively bid. That means compliant procurement without the RFP timeline.",
+    "We keep real inventory on the ground in Florida and Georgia. When your department needs a trailer, it's in our yard — not on a production schedule.",
+    "And because we're an approved cooperative contract vendor, your purchase runs through contracts that were already competitively bid. Compliant procurement, without the RFP timeline.",
   ],
-  stats: [
-    { value: "[X]", label: "units in stock across FL & GA", note: "[ADRIANA: confirm]" },
-    { value: "[X]", label: "years serving the Southeast", note: "[ADRIANA: confirm]" },
-    { value: "3", label: "Lakeland FL · Pompano FL · Macon GA", note: "[ADRIANA: confirm list]" },
-    { value: "NHTTR", label: "full-service repair centers", note: "" },
-  ],
-  photoSlot: "[ADRIANA: yard photo — inventory rows]",
+  flagfa: {
+    logo: "/municipal/flagfa-logo.webp",
+    text: "As a FLAGFA member, we are committed to serving state and local agencies with top-tier government fleet solutions.",
+  },
+  video: {
+    url: "https://youtu.be/8MZ-08eTd0A",
+    embed: "https://www.youtube-nocookie.com/embed/8MZ-08eTd0A",
+    thumb: "/municipal/miami-dade-video-thumb.webp",
+    caption: "Custom chassis built for Miami-Dade County — watch the delivery.",
+  },
+  stat: { value: "15+", label: "years serving municipalities" },
 };
 
 /* ---------------- Page 3 — Cooperative Purchasing (light) ---------------- */
 export const COOP = {
   eyebrow: "Cooperative Purchasing",
   headline: "Skip the bid process. Stay compliant.",
-  body: "Cooperative purchasing contracts let public agencies buy equipment through contracts that have already gone through a competitive solicitation. The bidding is done. The pricing is set. Your purchase is audit-ready from day one.",
+  body: "Cooperative contracts have already gone through competitive solicitation. The bidding is done, the pricing is set, and your purchase is audit-ready from day one.",
   vendorIntro: "Nationwide Haul is an approved vendor under:",
   programs: [
     {
@@ -84,18 +88,17 @@ export const COOP = {
     },
   },
   sidebar:
-    "Not sure if your agency can purchase through these contracts? Most Florida and Georgia municipalities, counties, school districts, and special districts are eligible. Call us — we'll check with you.",
+    "Not sure if your agency qualifies? Most Florida and Georgia municipalities, counties, school districts, and special districts do. Call us — we'll check with you.",
 };
 
 /* ---------------- Pages 4–7 — Equipment Lineup (light spread) ---------------- */
 export interface EquipmentUnit {
   category: string;
   copy: string;
-  availableUnder: string;
   /** Real photo in /public/municipal. When absent, photoSlot renders as a placeholder. */
   photo?: string;
   photoSlot?: string;
-  /** Short spec highlights rendered as chips. */
+  /** Spec highlights, collapsed behind a "Specs" toggle in the flipbook. */
   specs?: string[];
   /** Manufacturer badge (currently only MAC Trailer). */
   brand?: "mac";
@@ -109,8 +112,7 @@ export const EQUIPMENT = {
     [
       {
         category: "Moving Floor Trailers",
-        copy: "Self-unloading walking-floor trailers for transfer stations, yard waste, and bulky debris — no tipping, no overhead clearance issues. Built by MAC Trailer in lightweight extruded aluminum.",
-        availableUnder: "Available under: FSA",
+        copy: "Self-unloading walking-floor trailers for transfer stations, yard waste, and bulky debris. No tipping, no overhead clearance issues. Built by MAC Trailer in lightweight extruded aluminum.",
         photo: "/municipal/moving-floor.webp",
         specs: [
           "6005A extruded aluminum",
@@ -124,8 +126,7 @@ export const EQUIPMENT = {
       },
       {
         category: "Tippers",
-        copy: "Transfer trailers built for tipper operation — back in, lift, and gone. 6061 extruded aluminum construction keeps tare weight down and payload up.",
-        availableUnder: "Available under: FSA",
+        copy: "Transfer trailers built for tipper operation — back in, lift, and gone. 6061 extruded aluminum keeps tare weight down and payload up.",
         photo: "/municipal/tipper.webp",
         specs: [
           "6061 extruded aluminum",
@@ -142,13 +143,11 @@ export const EQUIPMENT = {
       {
         category: "Leachate Tanks",
         copy: "Purpose-built tanks for hauling landfill leachate. [ADRIANA: versions + capacities from screenshot — pending]",
-        availableUnder: "Available under: [ADRIANA: confirm contract]",
         photo: "/municipal/leachate-tank.webp",
       },
       {
         category: "Sludge Dumps",
         copy: "[ADRIANA: sludge dump copy + specs]",
-        availableUnder: "Available under: [ADRIANA: confirm contract]",
         photoSlot: "[ADRIANA: sludge dump photo]",
       },
     ],
@@ -156,14 +155,12 @@ export const EQUIPMENT = {
       {
         category: "Rail Chassis — Waste",
         copy: "[ADRIANA: rail chassis copy + specs]",
-        availableUnder: "Available under: [ADRIANA: confirm contract]",
         photoSlot: "[ADRIANA: rail chassis photo]",
       },
       {
-        category: "Gooseneck Low Boys",
-        copy: "Hydraulic detachable gooseneck lowboys rated at 55 tons in 12' — for moving excavators, dozers, and loaders between job sites. Level Apitong deck with a front approach ramp and traction cleats, and 4-position ride-height control for separate deck and fifth-wheel height.",
-        availableUnder: "Available under: [ADRIANA: confirm contract]",
-        photoSlot: "[ADRIANA: gooseneck lowboy photo]",
+        category: "Gooseneck Lowboy",
+        copy: "Hydraulic detachable gooseneck lowboy rated at 55 tons in 12' — for moving excavators, dozers, and loaders between job sites. Level Apitong deck, front approach ramp with traction cleats, 4-position ride-height control.",
+        photo: "/municipal/lowboy.webp",
         specs: [
           "55-ton capacity in 12' (GAWR/tires set legal payload)",
           "8'6” × 52'8” overall · 25' clear level deck",
@@ -178,8 +175,7 @@ export const EQUIPMENT = {
     [
       {
         category: "Tag Along Trailers",
-        copy: "Tag-along equipment trailers with a 21' deck and 60” lay-flat dovetail — spring-assisted ramps and 40,000 lb of equally distributed capacity. FOB Pittsview, AL; transport to other locations subject to additional charge.",
-        availableUnder: "Available under: [ADRIANA: confirm contract]",
+        copy: "Tag-along equipment trailers with a 21' deck and 60” lay-flat dovetail. Spring-assisted ramps and 40,000 lb of equally distributed capacity. FOB Pittsview, AL; transport to other locations subject to additional charge.",
         photo: "/municipal/tag-along.webp",
         specs: [
           "47,350 lb GVWR",
@@ -195,20 +191,45 @@ export const EQUIPMENT = {
   ] as EquipmentUnit[][],
 };
 
-/* ---------------- Page 6 — Financing & Municipal Leasing (light) ---------------- */
-export const FINANCING = {
-  eyebrow: "Financing & Municipal Leasing",
-  headline: "Financing that fits a government budget cycle.",
-  body: "Through NEF, our in-house equipment finance division, we offer municipal leasing and financing structured around fiscal-year budgets — not standard commercial terms forced onto a government timeline.",
-  pending:
-    "[ADRIANA: confirm with Derek/NEF what municipal products actually exist — tax-exempt lease-purchase? Straight municipal lease? Don't publish until confirmed.]",
+/* ---------------- Page 8 — Our Government Purchasing Programs (light) ---------------- */
+export const PROGRAMS = {
+  eyebrow: "Our Government Purchasing Programs",
+  headline: "Pre-negotiated. Pre-approved. Ready to buy.",
+  intro:
+    "Pre-negotiated cooperative contracts that simplify procurement for public agencies — no lengthy bid process required.",
+  cards: [
+    {
+      logo: "/municipal/sourcewell-logo.webp",
+      name: "Sourcewell",
+      badge: "Authorized Dealer",
+      sub: "Municipal Equipment via MAC Trailer",
+      copy: "Sourcewell simplifies government procurement for education, nonprofits, and agencies. We work via MAC Trailer to provide high-quality municipal trailers at competitive pricing.",
+      bullets: [
+        "Easy cooperative purchasing for municipalities",
+        "Exclusive access to MAC Trailer equipment",
+      ],
+      link: "https://www.sourcewell-mn.gov",
+    },
+    {
+      logo: "/municipal/fsa-logo.webp",
+      name: "Florida Sheriffs Association Cooperative",
+      badge: "Primary Vendor",
+      sub: "Walking Floors, Tippers, Low-Boys & More",
+      copy: "The FSA Cooperative has provided streamlined procurement to municipalities, police agencies, and state colleges since 1993.",
+      bullets: [
+        "Pre-negotiated purchasing contracts",
+        "Serving cities, counties & public safety agencies",
+      ],
+      link: "https://www.fsasheriffs.org",
+    },
+  ],
 };
 
-/* ---------------- Page 7 — Service & Parts (light) ---------------- */
+/* ---------------- Page 9 — Service & Parts (light) ---------------- */
 export const SERVICE = {
   eyebrow: "Service & Parts",
   headline: "Support after the sale.",
-  body: "Public works equipment can't sit in a repair queue. Our NHTTR service centers in [ADRIANA: locations] handle trailer repair, DOT inspections, and parts — so your units stay on the road and your maintenance records stay clean.",
+  body: "Public works equipment can't sit in a repair queue. Our NHTTR service centers handle trailer repair, DOT inspections, and parts — so your units stay on the road and your maintenance records stay clean.",
   bullets: [
     "Trailer repair & refurbishment",
     "DOT inspections",
@@ -218,14 +239,14 @@ export const SERVICE = {
   photoSlot: "[ADRIANA: NHTTR service bay photo]",
 };
 
-/* ---------------- Page 8 — How to Purchase (light) ---------------- */
+/* ---------------- Page 10 — How to Purchase (light) ---------------- */
 export const PURCHASE = {
   eyebrow: "How to Purchase",
   headline: "Four steps from quote to delivery.",
   steps: [
     {
       title: "Tell us what you need.",
-      copy: "Call or email with your equipment requirements. We'll confirm availability and which cooperative contract applies.",
+      copy: "Email your equipment requirements. We'll confirm availability and which cooperative contract applies.",
     },
     {
       title: "Receive your quote.",
@@ -244,15 +265,33 @@ export const PURCHASE = {
     "Every cooperative purchase includes the documentation your finance department and auditors need.",
 };
 
-/* ---------------- Page 9 — Back Cover (dark) ---------------- */
+/* ---------------- Page 11 — Trusted By (light) ---------------- */
+export const TRUSTED = {
+  eyebrow: "Track Record",
+  headline: "Trusted by leading government agencies.",
+  featured: [
+    { logo: "/municipal/agencies/miami-dade.webp", name: "Miami-Dade County" },
+    { logo: "/municipal/agencies/nasa.webp", name: "NASA" },
+  ],
+  agencies: [
+    { logo: "/municipal/agencies/broward.webp", name: "Broward County" },
+    { logo: "/municipal/agencies/orange-county.webp", name: "Orange County Government" },
+    { logo: "/municipal/agencies/hillsborough.webp", name: "Hillsborough County" },
+    { logo: "/municipal/agencies/charlotte.webp", name: "Charlotte County" },
+    { logo: "/municipal/agencies/orlando.webp", name: "City of Orlando" },
+    { logo: "/municipal/agencies/st-cloud.webp", name: "City of St. Cloud" },
+    { logo: "/municipal/agencies/toho-water.webp", name: "Toho Water Authority" },
+  ],
+};
+
+/* ---------------- Page 12 — Back Cover (dark) ---------------- */
 export const BACK = {
   title: BRAND.wordmark,
   subtitle: BRAND.program,
   contact: [
-    "[ADRIANA: phone — dedicated line or main?]",
-    "[ADRIANA: email — government@ or sales@?]",
+    "Contact your sales rep for more info.",
+    BRAND.email,
     BRAND.site,
-    "Locations: [ADRIANA: confirm list — Lakeland FL · Pompano FL · Macon GA]",
   ],
   vendorLabel: "Cooperative Contract Vendor",
   contracts: BRAND.contractsDot,
@@ -267,10 +306,11 @@ export const MUNI_PAGES: { n: number; title: string; dark: boolean }[] = [
   { n: 5, title: "Equipment Lineup", dark: false },
   { n: 6, title: "Equipment Lineup", dark: false },
   { n: 7, title: "Equipment Lineup", dark: false },
-  { n: 8, title: "Financing & Leasing", dark: false },
+  { n: 8, title: "Purchasing Programs", dark: false },
   { n: 9, title: "Service & Parts", dark: false },
   { n: 10, title: "How to Purchase", dark: false },
-  { n: 11, title: "Back Cover", dark: true },
+  { n: 11, title: "Trusted By", dark: false },
+  { n: 12, title: "Back Cover", dark: true },
 ];
 
 export const MUNI_CHAPTERS: { label: string; page: number }[] = [
@@ -278,8 +318,9 @@ export const MUNI_CHAPTERS: { label: string; page: number }[] = [
   { label: "Why NH", page: 2 },
   { label: "Cooperative", page: 3 },
   { label: "Equipment", page: 4 },
-  { label: "Financing", page: 8 },
+  { label: "Programs", page: 8 },
   { label: "Service", page: 9 },
   { label: "How to Buy", page: 10 },
-  { label: "Contact", page: 11 },
+  { label: "Trusted By", page: 11 },
+  { label: "Contact", page: 12 },
 ];

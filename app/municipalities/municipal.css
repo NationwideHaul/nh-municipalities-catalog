@@ -89,15 +89,32 @@
   justify-content: space-between;
 }
 
-.muni-cover-mark {
-  width: 54px;
-  height: 54px;
+/* real NH logo — .muni-sheet prefix outranks the flipbook's `.page img` rule */
+.muni-cover-logo {
+  display: block;
+  height: 46px;
+}
+
+.muni-sheet .muni-cover-logo .muni-nh-logo {
+  width: auto;
+  height: 100%;
+  object-fit: contain;
   display: block;
 }
 
-.muni-cover-mark svg {
+/* real cover photo */
+.muni-cover-photo {
+  border-radius: 12px;
+  overflow: hidden;
+  height: 360px;
+  flex: 0 0 auto;
+}
+
+.muni-sheet .muni-cover-photo img {
   width: 100%;
   height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .muni-cover-eyebrow {
@@ -273,31 +290,139 @@
   color: var(--muni-ink) !important;
 }
 
-/* stat band (page 2) */
-.muni-stats {
-  margin-top: auto;
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  border-top: 3px solid var(--muni-ink);
-}
-
-.muni-stat {
-  padding: 18px 14px 6px;
+/* Miami-Dade video block (page 2) */
+.muni-video {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  border-right: 1px solid var(--muni-line);
+  gap: 10px;
 }
 
-.muni-stat:last-child {
-  border-right: none;
+.muni-video-embed {
+  aspect-ratio: 16 / 9;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #000;
+}
+
+.muni-video-embed iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
+
+/* print/PDF swaps the iframe for a linked thumbnail */
+.muni-video-print {
+  display: none;
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  aspect-ratio: 16 / 9;
+}
+
+.muni-print .muni-video-embed {
+  display: none;
+}
+
+.muni-print .muni-video-print {
+  display: block;
+}
+
+.muni-sheet .muni-video-print img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.muni-video-play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--muni-red);
+  color: #fff;
+  font-size: 22px;
+  display: grid;
+  place-items: center;
+  padding-left: 5px;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.muni-video-caption {
+  margin: 0;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--muni-ink);
+}
+
+.muni-video-url {
+  font-weight: 600;
+  color: var(--muni-red);
+  margin-left: 6px;
+}
+
+/* FLAGFA membership + years band (page 2) */
+.muni-why-band {
+  margin-top: auto;
+  display: grid;
+  grid-template-columns: 1fr 200px;
+  gap: 16px;
+  align-items: stretch;
+}
+
+.muni-flagfa {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border: 1px solid var(--muni-line);
+  border-left: 5px solid var(--muni-red);
+  border-radius: 10px;
+  background: #fff;
+  padding: 14px 18px;
+}
+
+.muni-sheet .muni-flagfa img {
+  width: auto;
+  height: 72px;
+  object-fit: contain;
+  flex: 0 0 auto;
+}
+
+.muni-flagfa p {
+  margin: 0;
+  font-size: 14.5px;
+  line-height: 1.5;
+  font-weight: 600;
+  color: var(--muni-ink);
+}
+
+.muni-big-stat {
+  border: 1px solid var(--muni-line);
+  border-radius: 10px;
+  background: var(--muni-ink);
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
 }
 
 .muni-stat-value {
-  font-size: 30px;
+  font-size: 40px;
   font-weight: 900;
   color: var(--muni-red);
   line-height: 1;
+}
+
+.muni-big-stat .muni-stat-label {
+  color: #fafafa;
 }
 
 .muni-stat-label {
@@ -305,10 +430,6 @@
   font-weight: 700;
   line-height: 1.35;
   color: var(--muni-ink);
-}
-
-.muni-stat-note {
-  font-size: 11.5px;
 }
 
 /* cooperative programs (page 3) */
@@ -406,66 +527,61 @@
   color: var(--muni-ink);
 }
 
-/* equipment lineup (pages 4–5) */
+/* equipment lineup (pages 4–7) — big photo on top, copy below */
 .muni-units {
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: 24px;
   flex: 1 1 auto;
 }
 
 .muni-unit {
-  display: grid;
-  grid-template-columns: 300px 1fr;
-  gap: 24px;
-  align-items: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
 
 .muni-unit .muni-todo-block {
-  min-height: 210px;
+  min-height: 220px;
 }
 
 .muni-unit-body {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  padding-top: 6px;
 }
 
 .muni-unit-body h3 {
   margin: 0;
-  font-size: 23px;
+  font-size: 24px;
   font-weight: 900;
   color: var(--muni-ink);
   line-height: 1.2;
+  border-bottom: 3px solid var(--muni-red);
+  padding-bottom: 8px;
 }
 
 .muni-unit-body p {
   margin: 0;
-  font-size: 15.5px;
-  line-height: 1.58;
+  font-size: 15px;
+  line-height: 1.55;
   color: #33353a;
 }
 
 .muni-unit-photo {
-  min-height: 210px;
-  border: 1px solid var(--muni-line);
-  border-radius: 10px;
-  background: #fff;
-  display: grid;
-  place-items: center;
+  height: 228px;
+  border-radius: 12px;
   overflow: hidden;
-  padding: 10px;
+  border: 1px solid var(--muni-line);
+  flex: 0 0 auto;
 }
 
 /* .muni-sheet prefix outranks the flipbook's global `.page img` sizing rule */
 .muni-sheet .muni-unit-photo img {
-  width: auto;
-  height: auto;
-  max-width: 100%;
-  max-height: 240px;
-  object-fit: contain;
-  filter: drop-shadow(0 14px 16px rgba(26, 26, 26, 0.22));
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .muni-sheet .muni-unit-brand {
@@ -476,13 +592,99 @@
   display: inline-block;
 }
 
+/* specs dropdown — checkbox toggle in the flipbook, always open in print.
+   Open list floats over the content below so the fixed sheet never reflows. */
+.muni-specs-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+}
+
+.muni-specs-check {
+  display: none;
+}
+
+.muni-specs-toggle {
+  align-self: flex-start;
+  cursor: pointer;
+  font-size: 12.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--muni-ink);
+  border: 1.5px solid var(--muni-ink);
+  border-radius: 6px;
+  padding: 6px 14px;
+  user-select: none;
+}
+
+.muni-specs-toggle::after {
+  content: " ▾";
+  color: var(--muni-red);
+}
+
+.muni-specs-toggle:has(.muni-specs-check:checked)::after {
+  content: " ▴";
+}
+
 .muni-specs {
-  margin: 2px 0 0;
+  margin: 0;
   padding: 0;
   list-style: none;
-  display: flex;
+  display: none;
   flex-wrap: wrap;
   gap: 6px;
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  z-index: 6;
+  background: #fff;
+  border: 1px solid var(--muni-line);
+  border-radius: 10px;
+  padding: 12px;
+  box-shadow: 0 14px 30px rgba(26, 26, 26, 0.18);
+}
+
+.muni-specs-wrap:has(.muni-specs-check:checked) .muni-specs {
+  display: flex;
+}
+
+/* print: back in normal flow, no popover chrome */
+.muni-print .muni-specs {
+  position: static;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  box-shadow: none;
+}
+
+/* print/PDF: no interactivity — show the specs, hide the toggle.
+   Photos shrink a little so two units + open specs fit the sheet. */
+.muni-print .muni-specs {
+  display: flex !important;
+}
+
+.muni-print .muni-specs-toggle {
+  display: none;
+}
+
+.muni-print .muni-unit-photo {
+  height: 168px;
+}
+
+.muni-print .muni-unit-single .muni-unit-photo {
+  height: 400px;
+}
+
+.muni-print .muni-units {
+  gap: 22px;
+}
+
+.muni-print .muni-unit .muni-todo-block {
+  min-height: 150px;
 }
 
 .muni-specs li {
@@ -499,14 +701,8 @@
   print-color-adjust: exact;
 }
 
-.muni-unit-foot {
-  margin-top: auto;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
 .muni-unit-video {
+  align-self: flex-start;
   font-size: 12.5px;
   font-weight: 800;
   color: var(--muni-red);
@@ -516,37 +712,13 @@
 }
 
 /* single-unit feature page (Tag Along) */
-.muni-unit-single {
-  grid-template-columns: 1fr;
-  gap: 20px;
-}
-
 .muni-unit-single .muni-unit-photo {
-  min-height: 360px;
-}
-
-.muni-sheet .muni-unit-single .muni-unit-photo img {
-  max-height: 400px;
+  height: 430px;
 }
 
 .muni-unit-single .muni-specs li {
   font-size: 13px;
   padding: 7px 12px;
-}
-
-.muni-unit-tag {
-  align-self: flex-start;
-  margin-top: auto;
-  background: var(--muni-ink);
-  color: #fff;
-  font-size: 12.5px;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 1.2px;
-  padding: 7px 14px;
-  border-radius: 6px;
-  -webkit-print-color-adjust: exact;
-  print-color-adjust: exact;
 }
 
 /* service list (page 7) */
@@ -660,14 +832,14 @@
 }
 
 .muni-footer-mark {
-  width: 22px;
-  height: 22px;
+  height: 18px;
   flex: 0 0 auto;
 }
 
-.muni-footer-mark svg {
-  width: 100%;
+.muni-sheet .muni-footer-mark .muni-nh-logo {
+  width: auto;
   height: 100%;
+  object-fit: contain;
   display: block;
 }
 
@@ -689,23 +861,185 @@
   font-variant-numeric: tabular-nums;
 }
 
-.muni-unit-foot .muni-unit-tag {
-  margin-top: 0;
+/* ==========================================================================
+   Government Purchasing Programs (page 8)
+   ========================================================================== */
+.muni-prog-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  flex: 1 1 auto;
+  align-content: start;
+}
+
+.muni-prog-card {
+  border: 1px solid var(--muni-line);
+  border-top: 5px solid var(--muni-red);
+  border-radius: 10px;
+  background: #fff;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.muni-prog-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-height: 48px;
+}
+
+.muni-sheet .muni-prog-logo {
+  width: auto;
+  height: 44px;
+  max-width: 55%;
+  object-fit: contain;
+}
+
+.muni-prog-badge {
+  background: var(--muni-red);
+  color: #fff;
+  font-size: 11.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-radius: 999px;
+  padding: 6px 12px;
+  white-space: nowrap;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.muni-prog-card h3 {
+  margin: 0;
+  font-size: 19px;
+  font-weight: 900;
+  line-height: 1.25;
+  color: var(--muni-ink);
+}
+
+.muni-prog-sub {
+  font-size: 12.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--muni-gray);
+}
+
+.muni-prog-card p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.55;
+  color: #33353a;
+}
+
+.muni-prog-bullets {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.muni-prog-bullets li {
+  position: relative;
+  padding-left: 22px;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--muni-ink);
+  line-height: 1.4;
+}
+
+.muni-prog-bullets li::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 6px;
+  width: 8px;
+  height: 8px;
+  background: var(--muni-red);
+  transform: rotate(45deg);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.muni-prog-link {
+  margin-top: auto;
+  font-size: 13.5px;
+  font-weight: 800;
+  color: var(--muni-red);
+  text-decoration: none;
+  letter-spacing: 0.4px;
+}
+
+/* ==========================================================================
+   Trusted By (page 11)
+   ========================================================================== */
+.muni-trusted-featured {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.muni-trusted-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  flex: 1 1 auto;
+  align-content: start;
+}
+
+.muni-agency {
+  border: 1px solid var(--muni-line);
+  border-radius: 10px;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 18px 14px;
+  text-align: center;
+}
+
+.muni-sheet .muni-agency img {
+  width: auto;
+  height: auto;
+  max-width: 82%;
+  max-height: 72px;
+  object-fit: contain;
+}
+
+.muni-agency span {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--muni-gray);
+  line-height: 1.3;
+}
+
+.muni-agency.featured {
+  border-width: 2px;
+  border-color: var(--muni-ink);
+  padding: 24px 18px;
+}
+
+.muni-sheet .muni-agency.featured img {
+  max-height: 110px;
+}
+
+.muni-agency.featured span {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--muni-ink);
 }
 
 /* ==========================================================================
    Motion — subtle self-running animations.
    Flipbook only: disabled for the print/PDF route and reduced-motion users.
    ========================================================================== */
-@keyframes muni-float {
-  from {
-    transform: translateY(3px);
-  }
-  to {
-    transform: translateY(-6px);
-  }
-}
-
 @keyframes muni-slash-sheen {
   0% {
     transform: translateX(-100%);
@@ -739,15 +1073,6 @@
 }
 
 @media screen and (prefers-reduced-motion: no-preference) {
-  /* trailer photos drift gently, alternating so neighbors don't move in sync */
-  .muni-unit-photo img {
-    animation: muni-float 5.5s ease-in-out infinite alternate;
-  }
-
-  .muni-unit:nth-child(2) .muni-unit-photo img {
-    animation-delay: -2.75s;
-  }
-
   /* headlight sweep across the red slash on the covers */
   .muni-cover-slash {
     overflow: hidden;

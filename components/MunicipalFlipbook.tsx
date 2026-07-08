@@ -46,9 +46,14 @@ const Icon = {
 /* ---------- a single page: a live sheet scaled to fit the book ---------- */
 const Page = forwardRef<
   HTMLDivElement,
-  { side: "left" | "right"; scale: number; children: ReactNode }
->(({ side, scale, children }, ref) => (
-  <div className={`page page--${side}`} ref={ref} data-density="hard" style={{ position: "relative" }}>
+  { side: "left" | "right"; scale: number; hard?: boolean; children: ReactNode }
+>(({ side, scale, hard = false, children }, ref) => (
+  <div
+    className={`page page--${side}`}
+    ref={ref}
+    data-density={hard ? "hard" : "soft"}
+    style={{ position: "relative" }}
+  >
     <div className="muni-scale" style={{ transform: `scale(${scale})` }}>
       {children}
     </div>
@@ -106,7 +111,8 @@ export default function MunicipalFlipbook() {
   const goNext = useCallback(() => bookRef.current?.pageFlip()?.flipNext(), []);
   const goPrev = useCallback(() => bookRef.current?.pageFlip()?.flipPrev(), []);
   const goTo = useCallback((page1: number) => {
-    bookRef.current?.pageFlip()?.flip(page1 - 1);
+    // flip() stalls when jumping from a hard cover across soft pages — jump directly
+    bookRef.current?.pageFlip()?.turnToPage(page1 - 1);
     setDrawerOpen(false);
   }, []);
 
@@ -180,7 +186,7 @@ export default function MunicipalFlipbook() {
       {/* Top bar */}
       <header className="topbar">
         <div className="brand">
-          <span className="brand-mark" aria-hidden>
+          <span className="brand-mark" style={{ width: "auto" }} aria-hidden>
             <BrandMark />
           </span>
           <span className="brand-name">
@@ -232,9 +238,11 @@ export default function MunicipalFlipbook() {
                 showCover
                 usePortrait={size.portrait}
                 mobileScrollSupport
-                maxShadowOpacity={0.5}
-                flippingTime={650}
+                maxShadowOpacity={0.35}
+                flippingTime={900}
                 drawShadow
+                showPageCorners
+                disableFlipByClick
                 startPage={0}
                 onFlip={onFlip}
                 onInit={() => setReady(true)}
@@ -334,11 +342,10 @@ export default function MunicipalFlipbook() {
 
 function BrandMark() {
   return (
-    <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden>
-      <path d="M24 2 L34 12 L24 22 L14 12 Z" fill="#BE1E23" />
-      <path d="M24 26 L34 36 L24 46 L14 36 Z" fill="#15161a" stroke="#fff" strokeWidth="1.5" />
-      <path d="M2 24 L12 14 L12 34 Z" fill="#BE1E23" />
-      <path d="M46 24 L36 14 L36 34 Z" fill="#15161a" stroke="#fff" strokeWidth="1.5" />
-    </svg>
+    <img
+      src="/municipal/nh-white.png"
+      alt="Nationwide Haul"
+      style={{ height: 26, width: "auto", display: "block" }}
+    />
   );
 }
