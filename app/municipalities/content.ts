@@ -109,8 +109,8 @@ export const EQUIPMENT = {
       ],
       brand: "mac",
       video: {
-        url: "https://www.youtube.com/watch?v=TAm5vIAFrCw",
-        embed: "https://www.youtube-nocookie.com/embed/TAm5vIAFrCw",
+        url: "https://youtu.be/fLbGE4Pk_6Q",
+        embed: "https://www.youtube-nocookie.com/embed/fLbGE4Pk_6Q",
         thumb: "/municipal/moving-floor-video-thumb.webp",
       },
     },
@@ -128,8 +128,8 @@ export const EQUIPMENT = {
       ],
       brand: "mac",
       video: {
-        url: "https://youtu.be/SEsLV4uLlkY",
-        embed: "https://www.youtube-nocookie.com/embed/SEsLV4uLlkY",
+        url: "https://youtu.be/Sm_izQyvbVo",
+        embed: "https://www.youtube-nocookie.com/embed/Sm_izQyvbVo",
         thumb: "/municipal/tipper-video-thumb.webp",
       },
     },
